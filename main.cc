@@ -15,12 +15,21 @@ void glfw_error_func(int error_code, const char *description) {
 }
 
 GLFWwindow *create_window(int width, int height) {
-    GLFWwindow *win;
+    GLFWwindow *win = nullptr;
+    (void)width;
+    (void)height;
 
     glfwSetErrorCallback(&glfw_error_func);
     if (!glfwInit()) {
         return nullptr;
     }
+
+	glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_RESIZABLE,GL_FALSE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     win = glfwCreateWindow(width, height, "Pendulum", nullptr, nullptr); 
     if (!win) {
@@ -28,6 +37,18 @@ GLFWwindow *create_window(int width, int height) {
         return nullptr;
     }
     glfwMakeContextCurrent(win);
+
+    glewExperimental = true;
+	// Initialize GLEW
+	if (glewInit() != GLEW_OK) {
+		fprintf(stderr, "Failed to initialize GLEW\n");
+		getchar();
+		glfwTerminate();
+		return nullptr;
+	}
+
+	// Ensure we can capture the escape key being pressed below
+	glfwSetInputMode(win, GLFW_STICKY_KEYS, GL_TRUE);
     return win;
 }
 
@@ -36,14 +57,16 @@ int main(int argc, char **argv) {
     (void) argv; 
     GLFWwindow *window = create_window(1024, 768);
     if (!window) {
-        return -1;
+        return 1;
     }
 
     glfwSwapInterval(1);
+    Pendulum pen;
     while (!glfwWindowShouldClose(window)) {
 
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        pen.render(window, {{.9 * M_PI, 0}});
         
 
         glfwSwapBuffers(window);  
