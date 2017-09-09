@@ -1,6 +1,14 @@
-CXX = clang++
-CXXFLAGS = -std=c++14 -stdlib=libstdc++ -Werror -Wall -Wextra -Wpedantic -c -ggdb
-LDFLAGS = -std=c++14 -stdlib=libstdc++ -Werror -Wall -Wextra -Wpedantic -lBox2D -lGLEW -lglfw -lGL
+CXXFLAGS = -std=c++14 -Werror -Wall -Wextra -Wpedantic -c -ggdb
+LDFLAGS = -std=c++14 -Werror -Wall -Wextra -Wpedantic -lBox2D -lGLEW -lglfw
+OS = $(shell uname -s)
+ifeq ($(OS), Darwin)
+	CXX = /usr/local/opt/llvm/bin/clang++
+ 	LDFLAGS += -framework OpenGL
+else
+	CXX = clang++
+	CXXFLAGS += -stdlib=libstdc++
+	LDFLAGS += -lGL
+endif
 
 all: main compile_commands.json
 
