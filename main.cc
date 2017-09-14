@@ -62,7 +62,7 @@ int main( void )
         return -1;
     }
 
-    glfwSwapInterval(1);
+    glfwSwapInterval(2);
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
@@ -70,44 +70,22 @@ int main( void )
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
     
-    Pendulum pen;
-
-//	static const GLfloat g_vertex_buffer_data[] = { 
-//		-1.0f, -1.0f, 0.0f,
-//		 1.0f, -1.0f, 0.0f,
-//		 0.0f,  1.0f, 0.0f,
-//	};
-//
-//    GLuint vertexbuffer;
-//    glGenBuffers(1, &vertexbuffer);
-//    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-//	GLuint programID = LoadShaders("square_drawer_vert.glsl", "square_drawer_frag.glsl" );
+    Pendulum pen(.05, 10, 3, 9.81);
+    State s{{.9 * M_PI, 0}};
 
 	do{
-
 		// Clear the screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Use our shader
-        pen.render(window, State{{0.9*M_PI, 0}});
-//		glUseProgram(programID);
-//		glEnableVertexAttribArray(0);
-//		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-//		glVertexAttribPointer(
-//			0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-//			3,                  // size
-//			GL_FLOAT,           // type
-//			GL_FALSE,           // normalized?
-//			0,                  // stride
-//			(void*)0            // array buffer offset
-//		);
-
-		// Draw the triangle !
-//		glDrawArrays(GL_TRIANGLES, 0, 3); // 3 indices starting at 0 -> 1 triangle
-
-//		glDisableVertexAttribArray(0);
-
+        double u = .1*std::get<1>(s);
+        if (std::abs(u) > .1) {
+            u = std::copysign(.15, u);
+        }
+        std::cout << u << std::endl;
+        s = pen.simulate(s, u);
+        pen.render(window, s);
+        
 		// Swap buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -116,45 +94,9 @@ int main( void )
 	while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
 		   glfwWindowShouldClose(window) == 0 );
 
-	// Cleanup VBO
-//	glDeleteBuffers(1, &vertexbuffer);
-//	glDeleteVertexArrays(1, &VertexArrayID);
-//	glDeleteProgram(programID);
-
 	// Close OpenGL window and terminate GLFW
 	glfwTerminate();
 
 	return 0;
 }
 
-//int main(int argc, char **argv) {
-//    (void)argc;
-//    (void)argv;
-//    std::cout << "Hello, World!" << std::endl;
-//
-//    std::cout << "test string" << std::endl;
-//    
-//    Pendulum pen = Pendulum(.01, 1, 1, 9.81);
-//    std::vector<double> u(5000, .5);
-//    std::vector<State> states = pen.simulate({{M_PI - M_PI/10, 0}}, u);
-//
-//    FILE *in;
-//
-//    if (!(in = popen("gnuplot", "w"))) {
-//        std::cout << "Couldn't open gnuplot" << std::endl;
-//    }
-//    fprintf(in, "set terminal x11\r\n");
-//    fprintf(in, "reset\r\n");
-//    fprintf(in, "plot '-' using 1:2 with lines\r\n");
-//    double t = 0;
-//    for (auto &s : states) {
-//        fprintf(in, "%f %f %f\r\n", t, s[0], s[1]);
-//        std::cout << t << " " << s[0] << " " << s[1] << std::endl;
-//        t += .01;
-//    }
-//    fprintf(in, "e\r\n");
-//    fflush(in);
-//    getchar();
-//
-//    pclose(in);
-//}

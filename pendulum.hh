@@ -21,8 +21,8 @@ class Pendulum {
  private:
     void render_init();
 
-    const double dt;
-    const double mass;
-    const double length;
-    const double gravity;
+    const double dt_;
+    const double mass_;
+    const double length_;
+    const double gravity_;
 };
