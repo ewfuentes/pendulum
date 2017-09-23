@@ -1,11 +1,11 @@
-CXXFLAGS = -std=c++14 -Werror -Wall -Wextra -Wpedantic -c -ggdb
+CXXFLAGS = -std=c++14 -Werror -Wall -Wextra -Wpedantic -c -ggdb -isystem /usr/include/eigen3
 LDFLAGS = -std=c++14 -Werror -Wall -Wextra -Wpedantic -lBox2D -lGLEW -lglfw
 OS = $(shell uname -s)
 ifeq ($(OS), Darwin)
 	CXX = /usr/local/opt/llvm/bin/clang++
  	LDFLAGS += -framework OpenGL
 else
-	CXX = clang++
+	CXX = clang++-5.0
 	CXXFLAGS += -stdlib=libstdc++
 	LDFLAGS += -lGL
 endif
@@ -16,7 +16,7 @@ CPPSRC = main.cc pendulum.cc pendulum_render.cc shader.cc
 OBJS = $(patsubst %.cc,%.o,$(CPPSRC))
 JSON = $(addsuffix .json,$(CPPSRC))
 
-%.o : %.cc
+%.o %.cc.json : %.cc
 	$(CXX) $< -o $@ -MJ $<.json $(CXXFLAGS)
 
 main : $(OBJS)

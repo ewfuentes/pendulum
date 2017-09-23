@@ -70,17 +70,17 @@ int main( void )
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
     
-    Pendulum pen(.05, 10, 3, 9.81);
-    State s{{.9 * M_PI, 0}};
+    Pendulum pen(.05, 3, 1, 9.81);
+    State s{.9 * M_PI, 0};
 
 	do{
 		// Clear the screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Use our shader
-        double u = .1*std::get<1>(s);
+        double u = .1*s(1);
         if (std::abs(u) > .1) {
-            u = std::copysign(.15, u);
+            u = std::copysign(.5, u);
         }
         std::cout << u << std::endl;
         s = pen.simulate(s, u);

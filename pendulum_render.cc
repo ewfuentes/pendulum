@@ -40,7 +40,7 @@ void Pendulum::render(GLFWwindow *window, const State &s) {
                                  glm::vec3(0.0, 1.0, 0.0));  // The positive y axis is up
     // Draw stick
     // Model Transform matrix
-    glm::float32 theta = std::get<0>(s);
+    glm::float32 theta = s(0);
     // glm::float32 theta = 0;
     glm::mat4 model_scale = glm::scale<glm::float32>(glm::mat4(1.0f), glm::vec3( 0.05, length_ / 2.0f, 1));
     glm::mat4 model_rotate = glm::rotate<glm::float32>(glm::mat4(1.0f), theta, glm::vec3(0, 0, 1.0));
