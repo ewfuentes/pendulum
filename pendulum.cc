@@ -17,7 +17,19 @@ Pendulum::Pendulum(const double dt,
     Pendulum::render_init();                   
 };
 
-State Pendulum::simulate(const State x_0, const double u) {
+Eigen::Matrix2d Pendulum::compute_state_jacobian(const State &x) {
+    Eigen::Matrix2d J = Eigen::Matrix2d::Identity();
+    J << 1, dt_, dt_ * gravity_ / length_ * std::cos(x(0)), 1;
+    return J;
+}
+
+Eigen::Vector2d Pendulum::compute_control_jacobian(const double u) {
+    Eigen::Vector2d B = Eigen::Vector2d::Zero(); 
+    B << 0, dt_ / (mass_ * length_ * length_);
+    return B;
+}
+
+State Pendulum::simulate(const State &x_0, const double u) {
     State ret;
     double inertia = mass_ / (length_ * length_);
     // Symplectic Euler Integration
@@ -26,7 +38,7 @@ State Pendulum::simulate(const State x_0, const double u) {
     return ret;
 }
 
-std::vector<State> Pendulum::simulate(const State x_0,
+std::vector<State> Pendulum::simulate(const State &x_0,
                                       const std::vector<double> &u) {
     std::vector<State> states{x_0};
     for (auto &u_i : u) {

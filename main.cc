@@ -78,8 +78,8 @@ int main( void )
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Use our shader
-        double u = .1*s(1);
-        if (std::abs(u) > .1) {
+        double u = 1*s(1);
+        if (std::abs(u) > .5) {
             u = std::copysign(.5, u);
         }
         std::cout << u << std::endl;

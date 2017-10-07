@@ -6,5 +6,6 @@ class PendulumPlanner {
     PendulumPlanner(Pendulum pen); 
     plan(const State &s, const int num_steps);
  private:
+
     Pendulum pendulum_;
 }

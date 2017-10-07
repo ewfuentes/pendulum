@@ -9,6 +9,12 @@
 
 using State = Eigen::Vector2d;
 
+enum StateId {
+    POSITION = 0,
+    VELOCITY,
+    NUM_STATES
+};
+
 class Pendulum {
 friend class PendulumPlanner;
  public:
@@ -21,6 +27,9 @@ friend class PendulumPlanner;
     std::vector<State> simulate(const State &x_0, 
                                 const std::vector<double> &u); 
     void render(GLFWwindow *window, const State &s);
+
+    Eigen::Matrix2d compute_state_jacobian(const State &x);
+    Eigen::Vector2d compute_contol_jacobian(const double u);
  private:
     void render_init();
 
