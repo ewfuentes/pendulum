@@ -23,9 +23,25 @@ Eigen::Matrix2d Pendulum::compute_state_jacobian(const State &x) {
     return J;
 }
 
+std::vector<Eigen::Matrix2d> Pendulum::compute_state_jacobian(const std::vector<State> &x) {
+    std::vector<State> A;
+    for (const auto &x_t : x) {
+        A.push_back(compute_state_jacobian(x_t));
+    }
+    return A;
+}
+
 Eigen::Vector2d Pendulum::compute_control_jacobian(const double u) {
     Eigen::Vector2d B = Eigen::Vector2d::Zero(); 
     B << 0, dt_ / (mass_ * length_ * length_);
+    return B;
+}
+
+std::vector<Eigen::Vector2d> Pendulum::compute_control_jacobian(const std::vector<double> &u) {
+    std::vector<Eigen::Vector2d> B;
+    for (const auto &u_t : u) {
+       B.push_back(compute_contol_jacobian(u_t); 
+    }
     return B;
 }
 

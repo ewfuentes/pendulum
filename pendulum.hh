@@ -29,7 +29,9 @@ friend class PendulumPlanner;
     void render(GLFWwindow *window, const State &s);
 
     Eigen::Matrix2d compute_state_jacobian(const State &x);
+    std::vector<Eigen::Matrix2d> compute_state_jacobian(const std::vector<State> &x);
     Eigen::Vector2d compute_contol_jacobian(const double u);
+    std::vector<Eigen::Vector2d> compute_contol_jacobian(const std::vector<double> &u);
  private:
     void render_init();
 

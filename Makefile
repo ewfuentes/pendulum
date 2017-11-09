@@ -12,7 +12,8 @@ endif
 
 all: main compile_commands.json
 
-CPPSRC = main.cc pendulum.cc pendulum_render.cc shader.cc
+# CPPSRC = main.cc pendulum.cc pendulum_render.cc shader.cc
+CPPSRC = ilqr.cc numerical_diff.cc
 OBJS = $(patsubst %.cc,%.o,$(CPPSRC))
 JSON = $(addsuffix .json,$(CPPSRC))
 
@@ -29,5 +30,8 @@ clean:
 	rm -f main
 	rm -f *.json
 	rm -f *.o
+
+ilqr_test: ilqr_test.cc ilqr.cc ilqr.hh numerical_diff.cc numerical_diff.hh gtest/*.a
+	$(CXX) ilqr_test.cc ilqr.cc numerical_diff.cc gtest/libgtest.a gtest/libgtest_main.a -o $@ -isystem /usr/include/eigen3 -std=c++14 -lpthread
 
 .PHONY: compile_commands all clean
