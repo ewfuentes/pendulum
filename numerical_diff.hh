@@ -1,3 +1,4 @@
+#pragma once
 #include <functional>
 
 #include "Eigen/Core"
@@ -14,10 +15,12 @@ template<int OUTPUT_DIM, int INPUT_DIM>
 using Callable = std::function<Vec<OUTPUT_DIM>(const Vec<INPUT_DIM>&)>;
 
 
-template<int INPUT_DIM, int OUTPUT_DIM> Mat<OUTPUT_DIM, INPUT_DIM> 
-compute_jacobian(const Callable<INPUT_DIM, OUTPUT_DIM> &c, const Vec<INPUT_DIM> &set);
+template<int OUTPUT_DIM, int INPUT_DIM> Mat<OUTPUT_DIM, INPUT_DIM> 
+compute_jacobian(const Callable<OUTPUT_DIM, INPUT_DIM> &c, const Vec<INPUT_DIM> &set);
 
 template<int DIM> Mat<DIM, DIM>
-compute_hessian(const Callable<DIM, 1> &c, const Vec<DIM> &set);
+compute_hessian(const Callable<1, DIM> &c, const Vec<DIM> &set);
 
 }
+
+#include "numerical_diff_impl.hh"
