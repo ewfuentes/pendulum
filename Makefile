@@ -35,7 +35,7 @@ clean:
 	rm -f *.json
 	rm -f *.o
 
-ilqr_test: ilqr_test.cc ilqr.cc numerical_diff.cc gtest/*.a
+ilqr_test: ilqr_test.cc gtest/*.a
 	$(CXX) $^ $(GTEST_LIBS) -o $@ $(CXXFLAGS) -lpthread
 
 numerical_diff_test: numerical_diff_test.cc gtest/*.a

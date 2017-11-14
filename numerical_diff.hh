@@ -14,7 +14,6 @@ using Mat = Eigen::Matrix<double, ROW, COL>;
 template<int OUTPUT_DIM, int INPUT_DIM>
 using Callable = std::function<Vec<OUTPUT_DIM>(const Vec<INPUT_DIM>&)>;
 
-
 template<int OUTPUT_DIM, int INPUT_DIM> Mat<OUTPUT_DIM, INPUT_DIM> 
 compute_jacobian(const Callable<OUTPUT_DIM, INPUT_DIM> &c, const Vec<INPUT_DIM> &set);
 

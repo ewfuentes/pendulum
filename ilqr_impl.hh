@@ -50,24 +50,24 @@ ILQR<S,C>::DynamicsExpansion::compute_state_jac(
 template <int S, int C> typename ILQR<S,C>::ControlJacobian
 ILQR<S,C>::DynamicsExpansion::compute_control_jac(
     const Dynamics &d, const State &s, const Control &u) {
-    const numerics::Callable<C,S> f = [d, s](const numerics::Vec<C> &u) {
+    const numerics::Callable<S,C> f = [d, s](const numerics::Vec<C> &u) {
         return d(s, u);
     };
-    return numerics::compute_jacobian(f, u);
+    return numerics::compute_jacobian<S, C>(f, u);
 }
 
 template <int S, int C>
-ILQR<S,C>::CostExpansion::CostExpansion(const Cost &c, const State &x, const Control &u) :
-    const_term_(c(x, u)),
-    linear_term_(compute_jac(c, x, u)),
-    quadratic_term_(compute_hess(c, x, u)) {}
+ILQR<S,C>::CostExpansion::CostExpansion(const Cost &c, const State &x, const Control &u, const bool is_terminal) :
+    const_term_(c(x, u, is_terminal)),
+    linear_term_(compute_jac(c, x, u, is_terminal)),
+    quadratic_term_(compute_hess(c, x, u, is_terminal)) {}
 
 template <int S, int C> typename ILQR<S, C>::CostJacobian
-ILQR<S, C>::CostExpansion::compute_jac(const Cost &c, const State &x, const Control &u) {
-    const numerics::Callable<S+C, 1> f = [c](const numerics::Vec<S+C> &x) {
-        return c(x.head(S), x.tail(C));
+ILQR<S, C>::CostExpansion::compute_jac(const Cost &c, const State &x, const Control &u, const bool is_terminal) {
+    const numerics::Callable<1, S+C> f = [c, is_terminal](const numerics::Vec<S+C> &x) {
+        return numerics::Vec<1>{c(x.head(S), x.tail(C), is_terminal)};
     };
-    numerics::Vec<S+C> set = numerics::Vec<S+C>::Zeros();
+    numerics::Vec<S+C> set = numerics::Vec<S+C>::Zero();
     for (int i = 0; i < S; i++) {
         set(i) = x(i);
     }
@@ -78,11 +78,11 @@ ILQR<S, C>::CostExpansion::compute_jac(const Cost &c, const State &x, const Cont
 }
 
 template <int S, int C> typename ILQR<S, C>::CostHessian
-ILQR<S, C>::CostExpansion::compute_hess(const Cost &c, const State &x, const Control &u) {
-    const numerics::Callable<S+C, 1> f = [c](const numerics::Vec<S+C> &x) {
-        return c(x.head(S), x.tail(C));
+ILQR<S, C>::CostExpansion::compute_hess(const Cost &c, const State &x, const Control &u, const bool is_terminal) {
+    const numerics::Callable<1, S+C> f = [c, is_terminal](const numerics::Vec<S+C> &x) {
+        return numerics::Vec<1>{c(x.head(S), x.tail(C), is_terminal)};
     };
-    numerics::Vec<S+C> set = numerics::Vec<S+C>::Zeros();
+    numerics::Vec<S+C> set = numerics::Vec<S+C>::Zero();
     for (int i = 0; i < S; i++) {
         set(i) = x(i);
     }
@@ -94,7 +94,7 @@ ILQR<S, C>::CostExpansion::compute_hess(const Cost &c, const State &x, const Con
 
 template <int S, int C> double
 ILQR<S, C>::CostExpansion::evaluate(const State &x, const Control &u) const {
-    numerics::Vec<S+C> set = numerics::Vec<S+C>::Zeros();
+    numerics::Vec<S+C> set = numerics::Vec<S+C>::Zero();
     for (int i = 0; i < S; i++) {
         set(i) = x(i);
     }

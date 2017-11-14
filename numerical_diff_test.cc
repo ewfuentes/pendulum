@@ -53,7 +53,6 @@ Mat<2, 2> one_by_two_hess(const Vec<2> &x) {
     out.row(1) << 2, 10;
     return out;
 }
-
 }  // namespace
 
 TEST(JacobianTest, scalar_scalar_test) {
