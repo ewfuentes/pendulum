@@ -1,0 +1,17 @@
+cc_library(
+    name = "main",
+    srcs = glob(
+        ["googletest/src/*.cc"],
+        exclude = ["googletest/src/gtest-all.cc"]
+    ),
+    hdrs = glob([
+        "googletest/include/**/*.h",
+        "googletest/src/*.h"
+    ]),
+    copts = [
+        "-Iexternal/gtest_lib/googletest/include",
+        "-Iexternal/gtest_lib/googletest"
+    ],
+    linkopts = ["-pthread"],
+    visibility = ["//visibility:public"],
+)

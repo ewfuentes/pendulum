@@ -8,22 +8,57 @@ template <int S, int C>
 typename ILQR<S, C>::Result ILQR<S, C>::solve(const State &x0, const std::vector<Control> &u) {
     // Do a forward pass
     std::vector<State> states = forward_pass(x0, u);
+
     // Linearize Dynamics about X, U
+    // Quadraticize cost about X, U
+    std::vector<DynamicsExpansion> dyn_ex;
+    dyn_ex.reserve(states.size());
+    std::vector<CostExpansion> cost_ex;
+    cost_ex.reserve(states.size());
+    for (int i = 0; i < u.size(); i++) {
+        dyn_ex.push_back(DynamicsExpansion(dynamics_, states[i], u[i]));
+        cost_ex.push_back(CostExpansion(cost_, states[i], u[i]));
+    }
+
+    dyn_ex.push_back(DynamicsExpansion(dynamics_, states.back(), Control::Zero()));
+    cost_ex.push_back(CostExpansion(cost_, states.back(), Control::Zero()));
 
     // Do a backward pass
+    backward_pass(states, u, dyn_ex, cost_ex);
+    
     
     // Calculate updated u 
 }
 
 template <int S, int C>
 typename std::vector<ILQR<S, C>> ILQR<S, C>::forward_pass(const State &x0, const std::vector<Control> &u) {
-    std::vector<State> states(u.size() + 1);
+    std::vector<State> states;
+    states.reserve(u.size() + 1);
     states.push_back(x0);
     for (const auto &u_t : u) {
         states.push_back(dynamics_(states.back(), u_t));
     } 
     return states;
 } 
+
+template <int S, int C>
+void ILQR<S, C>::backward_pass(const std::vector<State> &x,
+                          const std::vector<Control> &u,
+                          const std::vector<DynamicsExpansion> &dyn_ex,
+                          const std::vector<CostExpansion> &cost_ex) {
+
+    (void)x;
+    (void)u;
+    (void)dyn_ex;
+    (void)cost_ex;
+    std::vector<Control> updated_u(x.size(), Control::Zero());
+    // Value matrix at the next time step
+    numerics::Mat<S, S> value_t = cost_ex.back().state_quadratic_term();
+    for (int i = u.size() - 2; i > 0; i--) {
+    
+    }
+}
+
 
 template <int S, int C>
 typename ILQR<S,C>::State ILQR<S,C>::DynamicsExpansion::evaluate(const State &x, const Control &u) const {
@@ -96,10 +131,10 @@ template <int S, int C> double
 ILQR<S, C>::CostExpansion::evaluate(const State &x, const Control &u) const {
     numerics::Vec<S+C> set = numerics::Vec<S+C>::Zero();
     for (int i = 0; i < S; i++) {
-        set(i) = x(i);
+        set(i) = x(i) - state_lin_point_(i);
     }
     for (int i = 0; i < C; i++) {
-        set(i+S) = u(i);
+        set(i+S) = u(i) - control_lin_point_(i);
     }
     return const_term_ + linear_term_ * set + .5 * set.transpose() * quadratic_term_ * set;
 }

@@ -47,6 +47,17 @@ public:
         const CostJacobian& linear_term() { return linear_term_; };
         const CostHessian& quadratic_term() { return quadratic_term_; }; 
 
+        const Eigen::Matrix<double, STATE_DIM, STATE_DIM> state_quadratic() {
+            return quadratic_term_.block(STATE_DIM, STATE_DIM, 0, 0);
+        };
+        const Eigen::Matrix<double, CONTROL_DIM, CONTROL_DIM> control_quadratic() {
+            return quadratic_term_.block(CONTROL_DIM, CONTROL_DIM, STATE_DIM, STATE_DIM);
+        };
+
+        const Eigen::Matrix<double, STATE_DIM, CONTROL_DIM> cross_quadratic() {
+            return quadratic_term_.block(STATE_DIM, CONTROL_DIM, STATE_DIM, 0);
+        };
+
     private:
         CostJacobian compute_jac(const Cost &c, const State &x, const Control &u, const bool is_terminal);
         CostHessian compute_hess(const Cost &c, const State &x, const Control &u, const bool is_terminal);
@@ -68,6 +79,10 @@ public:
 private:
 
     std::vector<ILQR<STATE_DIM, CONTROL_DIM>> forward_pass(const State &x0, const std::vector<Control> &u);
+    void backward_pass(const std::vector<State> &x0,
+                       const std::vector<Control> &u,
+                       const std::vector<DynamicsExpansion> &dyn_ex,
+                       const std::vector<CostExpansion> &cost_ex);
     
     const Dynamics dynamics_;
     const Cost cost_;

@@ -1,6 +1,7 @@
 #include "ilqr.hh"
 
 #include <cmath>
+#include <iostream>
 
 #include "gtest/gtest.h"
 
@@ -49,13 +50,13 @@ TEST(IlqrSetup, TestCostExpansion) {
     {
         const double ana = sliding_block_cost(block::State{1.0, 1.0}, block::Control{1.0}, false);
         const double num = ex.evaluate(block::State{1.0, 1.0}, block::Control{1.0});
-        EXPECT_LT(std::abs(num- ana) / (ana + EPS), 0.01);
+        EXPECT_LT(std::abs(num - ana) / (ana + EPS), 0.01);
     }
 
     {
         const double ana = sliding_block_cost(block::State{10.0, 1.0}, block::Control{-1.0}, false);
         const double num = ex.evaluate(block::State{10.0, 1.0}, block::Control{-1.0});
-        EXPECT_LT(std::abs(num- ana) / (ana + EPS), 0.01);
+        EXPECT_LT(std::abs(num - ana) / (ana + EPS), 0.01);
     }
 }
 
