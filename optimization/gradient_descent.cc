@@ -31,12 +31,6 @@ OptimizationResult GradientDescent::optimize(const OptimFunc &func, const Eigen:
         if (config_.line_search_enabled) {
 
         }
-//        std::cout
-//            << "Iter: " << i
-//            << " Value: " << result.function_value
-//            << " params: " << result.result.transpose()
-//            << " gradient: " << gradient.transpose()
-//            << std::endl;
         // update parameters
         result.result -= config_.alpha * gradient; 
     }
