@@ -1,9 +1,12 @@
+
+
 cc_library(
     name = "dynamical_system",
     hdrs = ["dynamical_system.hh"],
     deps = [
         "//external:eigen",
     ],
+    visibility = ["//visibility:public"],
 )
 
 cc_library(

@@ -9,10 +9,10 @@ Pendulum::State Pendulum::simulate(const Pendulum::State &x_0, const Pendulum::C
     const double torque = config_.mass * config_.gravity * std::sin(x_0[States::POSITION]);
     const double accel = (torque + u[Controls::TORQUE]) / inertia;
     
-    Pendulum::State new_state;
-    new_state
-        << x_0[States::POSITION] + x_0[States::VELOCITY] * config_.dt,
-           x_0[States::VELOCITY] + accel * config_.dt;
+    Pendulum::State new_state = Pendulum::State::Zero();
+    new_state <<
+        x_0[States::POSITION] + x_0[States::VELOCITY] * config_.dt,
+        x_0[States::VELOCITY] + accel * config_.dt;
     return new_state;
 }
 }  // namespace pendulum

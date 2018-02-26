@@ -2,7 +2,7 @@
 
 namespace dynamics {
 namespace pendulum {
-constexpr int STATE_DIM = 1;
+constexpr int STATE_DIM = 2;
 constexpr int CONTROL_DIM = 1;
 class Pendulum : public DynamicalSystem<STATE_DIM, CONTROL_DIM> {
  public:
