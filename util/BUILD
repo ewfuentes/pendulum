@@ -18,7 +18,8 @@ cc_library(
     name = "numerical_diff",
     hdrs = ["numerical_diff.hh"],
     srcs = ["numerical_diff.cc"],
-    deps = ["//external:eigen",]
+    deps = ["//external:eigen",],
+    visibility = ["//visibility:public"],
 )
 
 cc_test(
