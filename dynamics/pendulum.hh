@@ -1,3 +1,5 @@
+#pragma once
+
 #include "dynamics/dynamical_system.hh"
 
 namespace dynamics {

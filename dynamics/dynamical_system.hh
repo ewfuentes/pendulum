@@ -22,8 +22,7 @@ class DynamicalSystem {
         return ret;
     }
 
- private:
-    static constexpr int STATE_DIM_ = S_DIM;
-    static constexpr int CONTROL_DIM_ = C_DIM;
+    static constexpr int STATE_DIM = S_DIM;
+    static constexpr int CONTROL_DIM = C_DIM;
 };
 };

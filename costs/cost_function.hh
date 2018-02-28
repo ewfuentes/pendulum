@@ -1,15 +1,16 @@
 #pragma once
 
-#include <dynamics/dynamical_system.hh>
+#include "dynamics/dynamical_system.hh"
 
 namespace costs {
-template <class T>
+template <typename T>
 class CostFunction {
  public:
-    static_assert(std::is_base_of<dynamics::DynamicalSystem, T>::value,
-        "T is not derived from Base");
-    virtual double operator()(const T::State &state,
-                              const T::Control &u,
+    static_assert(std::is_base_of<
+            dynamics::DynamicalSystem<T::STATE_DIM, T::CONTROL_DIM>, T>::value,
+        "T is not derived from DynamicalSystem");
+    virtual double operator()(const typename T::State &state,
+                              const typename T::Control &u,
                               const bool is_terminal) const = 0;
 };
 }  // namespace costs

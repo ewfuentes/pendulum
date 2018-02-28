@@ -4,13 +4,14 @@
 
 #include "dynamics/pendulum.hh"
 #include "costs/cost_function.hh"
+#include "util/angle_diff.hh"
 
 namespace costs {
 namespace pendulum {
-using dynamics::Pendulum;
-class EnergyCost : CostFunction<Pendulum> {
+using dynamics::pendulum::Pendulum;
+class EnergyCost : public CostFunction<Pendulum> {
  public:
-    EnergyCost(const Pendulum::Config &config) p_config_{config} {};
+    EnergyCost(const Pendulum::Config &config) : p_config_{config} {};
 
     double operator()(const Pendulum::State &x,
                       const Pendulum::Control &u,
@@ -28,7 +29,7 @@ class EnergyCost : CostFunction<Pendulum> {
     const Pendulum::Config p_config_;
 };
 
-class PositionCost : CostFunction<Pendulum> {
+class PositionCost : public CostFunction<Pendulum> {
  public:
     PositionCost() {};
 
@@ -40,21 +41,21 @@ class PositionCost : CostFunction<Pendulum> {
     }
 };
 
-class PendulumCost : CostFunction<Pendulum> {
+class PendulumCost : public CostFunction<Pendulum> {
  public:
     struct Config {
         double energy_weight;
         double position_weight;
-    }
+    };
 
     PendulumCost(const Pendulum::Config &p_config, const Config &config) :
-        energy_cost_(EnergyCost(p_config)), config_(config) {}
+        energy_cost_(EnergyCost(p_config)), config_(config) {};
 
     double operator()(const Pendulum::State &x,
                       const Pendulum::Control &u,
                       const bool is_terminal) const {
-        return config_.energy_weight * energy_cost(x, u, is_terminal) + 
-            config_.position_weight * position_cost(x, u, is_terminal);
+        return config_.energy_weight * energy_cost_(x, u, is_terminal) + 
+            config_.position_weight * position_cost_(x, u, is_terminal);
     }
 
  private:

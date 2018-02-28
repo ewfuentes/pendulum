@@ -1,4 +1,4 @@
-
+package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "dynamical_system",
@@ -6,7 +6,6 @@ cc_library(
     deps = [
         "//external:eigen",
     ],
-    visibility = ["//visibility:public"],
 )
 
 cc_library(
