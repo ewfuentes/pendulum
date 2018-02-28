@@ -10,6 +10,8 @@ class GradientDescent : public Optimizer {
         double alpha = .001; 
         // Use line search to adjust step size
         bool line_search_enabled = false;
+        // Line search expected decrease ratio
+        double line_search_expected_decrease = .9;
         // tolerance in function value
         double f_tol = 1e-9;
         // max number of iterations

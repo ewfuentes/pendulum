@@ -9,13 +9,14 @@ namespace optimization {
 TEST(GradientDescentTest, quadratic_test) {
     // Setup
     GradientDescent::Config config = {
-        .alpha = .1,    
-        .line_search_enabled = false,
+        .alpha = .1,
+        .line_search_enabled = true,
+        .line_search_expected_decrease = 0.9,
         .f_tol = 1e-9,
         .max_iters = 1000,
     };
     GradientDescent opt = GradientDescent(config);
-    Eigen::Vector3d x0{1, 2, 3};
+    Eigen::Vector4d x0{1, 2, 3, 4};
 
     // Action
     OptimizationResult result = opt.optimize(test_functions::sphere, x0);
@@ -31,12 +32,13 @@ TEST(GradientDescentTest, rosenbrock_test) {
     // Setup
     GradientDescent::Config config = {
         .alpha = .1,    
-        .line_search_enabled = false,
+        .line_search_enabled = true,
+        .line_search_expected_decrease = 0.9,
         .f_tol = 1e-9,
         .max_iters = 1000,
     };
     GradientDescent opt = GradientDescent(config);
-    Eigen::Vector3d x0{0, 0, 0};
+    Eigen::Vector4d x0{0, 0, 0, 0};
 
     // Action
     OptimizationResult result = opt.optimize(test_functions::rosenbrock, x0);
