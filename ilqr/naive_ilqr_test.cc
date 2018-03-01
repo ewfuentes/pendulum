@@ -21,16 +21,17 @@ TEST(NaiveIlqrTest, pendulum_test) {
 
     // create cost function
     const costs::pendulum::PendulumCost::Config cost_config {
-        .energy_weight = 1.0,
-        .position_weight = 1.0,
+        .energy_weight = 2.0,
+        .position_weight = 2.0,
+        .control_weight = 20.0,
     };
     std::unique_ptr<costs::CostFunction<Pendulum>> pendulum_cost =
         std::make_unique<PendulumCost>(dyn_config, cost_config);
 
     NaiveIlqr<Pendulum> ilqr(std::move(pendulum), std::move(pendulum_cost));
     
-    Pendulum::State x0 = {0,0};
-    std::vector<Pendulum::Control> u(20, Pendulum::Control());
+    Pendulum::State x0 = {0,.01};
+    std::vector<Pendulum::Control> u(10, Pendulum::Control());
     ilqr.solve(x0, u);
 }
 }  // namespace ilqr

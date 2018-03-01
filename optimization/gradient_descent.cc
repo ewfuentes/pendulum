@@ -61,6 +61,7 @@ OptimizationResult GradientDescent::optimize(
             << "iter: " << i
             << " f_val: " << result.function_value
             << " alpha: " << alpha
+            << " converged: " << result.converged
             << " x: " << result.result.transpose()
             << " grad: " << gradient.transpose()
             << std::endl;

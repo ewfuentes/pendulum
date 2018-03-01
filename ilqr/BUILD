@@ -1,3 +1,5 @@
+package(default_visibility = ["//visibility:public"])
+
 cc_library(
     name = "naive_ilqr",
     hdrs = [
@@ -17,6 +19,7 @@ cc_test(
         ":naive_ilqr",
         "//costs:pendulum_costs",
         "//dynamics:pendulum",
+        "//optimization:gradient_descent",
         "//external:gtest",
     ]
 )

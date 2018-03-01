@@ -12,7 +12,7 @@ class DynamicalSystem {
    
     virtual State simulate(const State &x_0, const Control &u) = 0;
 
-    virtual std::vector<State> simulate(const State &x_0, const std::vector<Control> &u) {
+    std::vector<State> simulate_all(const State &x_0, const std::vector<Control> &u) {
         std::vector<State> ret;
         ret.reserve(u.size() + 1);
         ret.push_back(x_0);
