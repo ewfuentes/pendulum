@@ -12,5 +12,6 @@ cc_library(
     deps = [
         "//dynamics:dynamical_system",
         "//util:angle_diff",
+        "//util:huber",
     ],
 )

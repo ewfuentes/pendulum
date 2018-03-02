@@ -64,8 +64,8 @@ TEST(PendulumTest, side_position_tests) {
         const Pendulum::State new_state_2 = p.simulate(new_state_1, control);
 
         // VERIFICATION
-        EXPECT_GT(new_state_2[Pendulum::States::POSITION], state[Pendulum::States::POSITION]);
-        EXPECT_GT(new_state_2[Pendulum::States::VELOCITY], state[Pendulum::States::VELOCITY]);
+        EXPECT_LT(new_state_2[Pendulum::States::POSITION], state[Pendulum::States::POSITION]);
+        EXPECT_LT(new_state_2[Pendulum::States::VELOCITY], state[Pendulum::States::VELOCITY]);
     }
 
 }

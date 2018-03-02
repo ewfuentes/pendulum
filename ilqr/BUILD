@@ -21,5 +21,6 @@ cc_test(
         "//dynamics:pendulum",
         "//optimization:gradient_descent",
         "//external:gtest",
+        "//util:numerical_diff",
     ]
 )

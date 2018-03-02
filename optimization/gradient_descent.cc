@@ -57,14 +57,14 @@ OptimizationResult GradientDescent::optimize(
         const double alpha = config_.line_search_enabled ? 
             perform_line_search(func, result.result, gradient, config_.alpha, 0.9) : config_.alpha;
 
-        std::cout
-            << "iter: " << i
-            << " f_val: " << result.function_value
-            << " alpha: " << alpha
-            << " converged: " << result.converged
-            << " x: " << result.result.transpose()
-            << " grad: " << gradient.transpose()
-            << std::endl;
+//        std::cout
+//            << "iter: " << i
+//            << " f_val: " << result.function_value
+//            << " alpha: " << alpha
+//            << " converged: " << result.converged
+//            << " x: " << result.result.transpose()
+//            << " grad: " << gradient.transpose()
+//            << std::endl;
 
         // update parameters
         result.result -= alpha * gradient; 

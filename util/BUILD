@@ -1,4 +1,4 @@
-
+package(default_visibility = ["//visibility:public"])
 cc_library(
     name = "angle_diff",
     hdrs = ["angle_diff.hh"],
@@ -12,6 +12,12 @@ cc_test(
         ":angle_diff",
         "//external:gtest",
     ]
+)
+
+
+cc_library(
+    name = "huber",
+    hdrs = ["huber.hh"],
 )
 
 cc_library(

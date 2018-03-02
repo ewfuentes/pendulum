@@ -21,9 +21,8 @@ class NaiveIlqr {
         double cost;
     };
 
-     NaiveIlqr(std::unique_ptr<T> dyn,
-             std::unique_ptr<costs::CostFunction<T>> cost) :
-        dynamics_(std::move(dyn)), cost_function_(std::move(cost)) {};
+     NaiveIlqr(const T dyn, const costs::CostFunction<T> *cost) :
+        dynamics_(dyn), cost_function_(cost) {};
 
      // Given an initial set of controls, find the control sequence which
      // minimizes the cost function
@@ -31,8 +30,8 @@ class NaiveIlqr {
              const std::vector<typename T::Control> &u) const;
 
  private:
-    const std::unique_ptr<T> dynamics_;
-    const std::unique_ptr<costs::CostFunction<T>> cost_function_; 
+    const T dynamics_;
+    const costs::CostFunction<T> *cost_function_; 
 };
 }  // namespace ilqr
 

@@ -10,9 +10,9 @@ class DynamicalSystem {
     using State = Eigen::Matrix<double, S_DIM, 1>;
     using Control = Eigen::Matrix<double, C_DIM, 1>;
    
-    virtual State simulate(const State &x_0, const Control &u) = 0;
+    virtual State simulate(const State &x_0, const Control &u) const = 0;
 
-    std::vector<State> simulate_all(const State &x_0, const std::vector<Control> &u) {
+    std::vector<State> simulate_all(const State &x_0, const std::vector<Control> &u) const {
         std::vector<State> ret;
         ret.reserve(u.size() + 1);
         ret.push_back(x_0);

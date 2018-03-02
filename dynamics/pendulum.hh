@@ -25,7 +25,7 @@ class Pendulum : public DynamicalSystem<STATE_DIM, CONTROL_DIM> {
     };
 
     Pendulum(const Config &config);
-    State simulate(const State &x_0, const Control &u);
+    State simulate(const State &x_0, const Control &u) const;
 
  private:
     const Config config_;

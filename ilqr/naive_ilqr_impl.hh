@@ -51,7 +51,7 @@ NaiveIlqr<T>::solve(const typename T::State &x0, const std::vector<typename T::C
             build_vector_of_control<typename T::Control>(new_u);
         // This is going to be really slow....
         // Roll forward dynamics
-        const std::vector<typename T::State> traj = dynamics_->simulate_all(x0, controls); 
+        const std::vector<typename T::State> traj = dynamics_.simulate_all(x0, controls); 
 
         // compute stepwise costs
         double total_cost = 0;
@@ -74,7 +74,7 @@ NaiveIlqr<T>::solve(const typename T::State &x0, const std::vector<typename T::C
         .line_search_enabled = false,
         .line_search_expected_decrease = 0.9,
         .f_tol = 1e-9,
-        .max_iters = 10000,
+        .max_iters = 1000,
     };
 
     const Eigen::VectorXd flat_controls = flatten_vector_of_control(u);
@@ -82,15 +82,18 @@ NaiveIlqr<T>::solve(const typename T::State &x0, const std::vector<typename T::C
     optimization::OptimizationResult result = opt.optimize(opt_func, flat_controls);
     std::vector<typename T::Control> controls =
         build_vector_of_control<typename T::Control>(result.result);
-    std::vector<typename T::State> traj = dynamics_->simulate_all(x0, controls);
+    std::vector<typename T::State> traj = dynamics_.simulate_all(x0, controls);
     
-    std::cout << result.result.transpose() << std::endl;
-    for (const auto &traj_pt : traj) {
-        std::cout <<  traj_pt.transpose() << std::endl;
-    }
-
-
-    
-    return Trajectory{};
+//    std::cout << result.result.transpose() << std::endl;
+//    for (int i = 0; i < (int)controls.size(); i++) {
+//
+//        std::cout <<  traj[i].transpose() << " " << controls[i].transpose() << std::endl;
+//    }
+//    std::cout << traj.back().transpose() << std::endl;
+    return Trajectory{
+        .u = controls,
+        .x = traj,
+        .cost = 0.0 
+    };
 }
 }  // namespace ilqr

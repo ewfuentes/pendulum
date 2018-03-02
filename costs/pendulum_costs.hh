@@ -5,6 +5,7 @@
 #include "dynamics/pendulum.hh"
 #include "costs/cost_function.hh"
 #include "util/angle_diff.hh"
+#include "util/huber.hh"
 
 namespace costs {
 namespace pendulum {
@@ -23,7 +24,7 @@ class EnergyCost : public CostFunction<Pendulum> {
         const double height = p_config_.length * (1 - std::cos(x[Pendulum::States::POSITION]));
         const double potential_energy = p_config_.mass * p_config_.gravity * height;
         const double energy_delta = desired_energy - kinetic_energy - potential_energy;
-        return energy_delta * energy_delta;
+        return util::huber(energy_delta);
     }
  private:
     const Pendulum::Config p_config_;
@@ -37,7 +38,7 @@ class PositionCost : public CostFunction<Pendulum> {
                       const Pendulum::Control &u,
                       const bool is_terminal) const {
         const double angle_diff = util::angle_diff(x[Pendulum::States::POSITION], M_PI);
-        return angle_diff * angle_diff;
+        return util::huber(angle_diff);
     }
 };
 
